@@ -1,0 +1,26 @@
+{
+    "general": {
+        "or": "or",
+        "english": "English",
+        "portuguese": "Portuguese",
+        "welcome": "Welcome",
+        "view_all": "View all",
+        "search_book": "Search for a book"
+    },
+    "auth": {
+        "login": "Login",
+        "sign_up": "Sign up",
+        "password": "Password",
+        "username": "Username",
+        "type_your_email": "Type your e-mail",
+        "type_your_username": "Type your username",
+        "type_your_password": "Type your password",
+        "forgot_password": "Forgot Password?",
+        "sign_in_with_google": "Sign in with google"
+    },
+    "validation": {
+        "invalid_email": "Invalid e-mail adress",
+        "invalid_password": "Must be at least 8 characters and contain at least 1 number and 1 special character",
+        "invalid_username": "Must have at least 5 characters and no special characters"
+    }
+}

@@ -1,0 +1,26 @@
+{
+    "general": {
+        "or": "ou",
+        "english": "Inglês",
+        "portuguese": "Português",
+        "welcome": "Bem vindo(a)",
+        "view_all": "Ver tudo",
+        "search_book": "Pesquise por um livro"
+    },
+    "auth": {
+        "login": "Entrar",
+        "sign_up": "Registrar",
+        "password": "Senha",
+        "username": "Nome de usuário",
+        "type_your_email": "Digite seu e-mail",
+        "type_your_username": "Digite seu nome de usuário",
+        "type_your_password": "Digite sua senha",
+        "forgot_password": "Esqueceu a Senha?",
+        "sign_in_with_google": "Entrar com google"
+    },
+    "validation": {
+        "invalid_email": "Endereço de e-mail inválido",
+        "invalid_password": "Deve conter pelo menos 8 caracteres e conter ao menos 1 número e 1 caractere especial",
+        "invalid_username": "Deve conter pelo menos 5 caracteres e nenhum caracter especial"
+    }
+}
