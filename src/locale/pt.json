@@ -9,6 +9,7 @@
     },
     "auth": {
         "login": "Entrar",
+        "logout": "Sair",
         "sign_up": "Registrar",
         "password": "Senha",
         "username": "Nome de usuário",

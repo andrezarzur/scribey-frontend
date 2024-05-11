@@ -27,6 +27,7 @@
                             :rules="[val => isValidEmail(val) || $t('validation.invalid_email')]" 
                             style="" v-model="email" 
                             label="E-mail" 
+                            autocomplete="on"
                             stack-label :dense="dense" 
                             :placeholder="$t('auth.type_your_email')" 
                             type="email"
@@ -80,7 +81,7 @@
                 <!-- <q-card-section class="flex justify-end">
                   <q-btn icon="close" flat round dense v-close-popup />
                 </q-card-section> -->
-                <q-btn icon="close" flat round dense v-close-popup class="text-white"style="position: absolute;right: 0;margin-top: 20px;margin-right: 20px;z-index: 9;" />
+                <q-btn icon="close" flat round dense v-close-popup class="text-white" style="position: absolute;right: 0;margin-top: 20px;margin-right: 20px;z-index: 9;" @click="tests"/>
                 <q-card-section class="flex items-center" style="height: 100%">
                   <q-carousel
                     v-model="slide"
@@ -124,21 +125,22 @@
 </template>
 
 <script setup>
-  import { ref } from 'vue'
+  import { ref, defineProps, defineEmits } from 'vue'
   import { login, register } from '../services/modules/AuthService'
-  import { defineEmits } from 'vue'
   import { useQuasar } from 'quasar'
+  
 
   const slide = ref('style')
-  const password = ref('')
-  const email = ref('')
+  const password = ref('Andre123.')
+  const email = ref('andrezarzur@hotmail.com')
   const username = ref('')
   const dense = ref(false)
   const $q = useQuasar()
 
   const emits = defineEmits([
-    'childEvent'
+    'closeModal'
   ])
+  
   const props = defineProps([
     'login'
   ])
@@ -148,25 +150,14 @@
     console.log("Handle the code", oAuth2Code)
   }
 
-  const loginNotification = () => {
+  const notification = (message, color) => {
     $q.notify({
       progress: true,
-      message: 'Login realizado com sucesso!',
-      color: 'lime-9',
+      message: message,
+      color: color,
       actions: [
-            { icon: 'close', color: 'white', round: true, handler: () => { /* ... */ } }
-          ]
-    })
-  }
-
-  const registerNotification = () => {
-    $q.notify({
-      progress: true,
-      message: 'Usuário registrado com sucesso!',
-      color: 'lime-9',
-      actions: [
-            { icon: 'close', color: 'white', round: true, handler: () => { /* ... */ } }
-          ]
+        { icon: 'close', color: 'white', round: true, handler: () => { /* ... */ } }
+      ]
     })
   }
 
@@ -176,25 +167,25 @@
         email: email.value,
         password: password.value
       });
-
       
       if (response.status == 200) {
-        emits('closeModal', false)
-        loginNotification();
+        sessionStorage.setItem('loggedIn', true);
+        window.location.reload();
       } else {
-        
+        notification('Erro nas credenciais!', 'red-9');
       }
     } else {
       const response = await register({
         username: username.value,
         email: email.value,
         password: password.value,
-        role: 'ADMIN'
       })
 
       if (response.status == 200) {
-        emits('closeModal', false)
-        registerNotification();
+        sessionStorage.setItem('registered', true);
+        window.location.reload();
+      } else {
+        notification('Erro nas credenciais!', 'red-9');
       }
     }
   };

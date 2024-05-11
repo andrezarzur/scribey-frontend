@@ -9,6 +9,7 @@
     },
     "auth": {
         "login": "Login",
+        "logout": "Logout",
         "sign_up": "Sign up",
         "password": "Password",
         "username": "Username",

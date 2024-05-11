@@ -11,8 +11,8 @@
         
         <div class="flex">
           <q-btn href="/" unelevated stretch flat no-caps label="Home" class="header-button"/>
-          <q-btn unelevated stretch flat no-caps label="Books" class="header-button"/>
-          <q-btn href="/profile" stretch flat no-caps label="Profile" class="header-button"/>
+          <q-btn href="/books" unelevated stretch flat no-caps label="Books" class="header-button"/>
+          <q-btn v-if="user" href="/profile" stretch flat no-caps label="Profile" class="header-button"/>
         </div>
 
 
@@ -36,13 +36,14 @@
           </q-list>
         </q-btn-dropdown>
 
-        <q-btn unelevated class="button" @click="handleModal(false)" :label="$t('auth.sign_up')" style="margin-right: 10px;  min-width: 130px"/>
-        <q-btn unelevated class="button" @click="handleModal(true)" :label="$t('auth.login')" style="margin-right: 10px; min-width: 130px;"/>
+        <q-btn v-if="!user" unelevated class="button" @click="handleModal(false)" :label="$t('auth.sign_up')" style="margin-right: 10px;  min-width: 130px"/>
+        <q-btn v-if="!user" unelevated class="button" @click="handleModal(true)" :label="$t('auth.login')" style="margin-right: 10px; min-width: 130px;"/>
+        <q-btn v-if="user" unelevated class="button" @click="handleLogout()" :label="$t('auth.logout')" style="margin-right: 10px; min-width: 130px;"/>
 
         <AuthModal 
           v-model="visibility" 
           :login="login"
-          @closeModal="handleChildEvent"
+          @closeModal="handleCloseModal"
         />
 
       </q-toolbar>
@@ -57,24 +58,65 @@
 
 
 <script setup>
-  import { ref } from 'vue'
+  import { ref, onMounted } from 'vue'
   import { useI18n } from 'vue-i18n';
   import AuthModal from './AuthModal.vue';
+  import { logout } from '../services/modules/AuthService'
+  import { useQuasar } from 'quasar'
   const { locale } = useI18n();
   const visibility = ref(false)
   const login = ref(false)
+  const user = ref(window.localStorage.getItem('user'));
+  const $q = useQuasar()
+
+  onMounted(() => {
+    if (sessionStorage.getItem('loggedIn')) {
+      notification('Bem vindo de volta, ' + JSON.parse(user.value).username +'!', 'lime-9');
+      sessionStorage.removeItem('loggedIn');
+    }
+    if(sessionStorage.getItem('registered')) {
+      notification('Seja bem vindo, ' + JSON.parse(user.value).username +'!', 'lime-9');
+      sessionStorage.removeItem('registered');
+    }
+    if(sessionStorage.getItem('loggedOut')) {
+      notification('Até a próxima, ' + sessionStorage.getItem('loggedOut') +'!', 'lime-9');
+      sessionStorage.removeItem('loggedOut');
+    }
+  });
 
   const handleModal = (bool) => {
     visibility.value = true;  
     login.value = bool;
   };
 
-  const handleChildEvent = (data) => {
+  const handleCloseModal = (data) => {
     visibility.value = data
+    user.value = window.localStorage.getItem('user');
+  }
+
+  const handleLogout = async () => {
+    const response = await logout();
+    if (response.status == 200) {
+      sessionStorage.setItem('loggedOut', JSON.parse(user.value).username);
+      user.value = null;
+      window.location.reload();
+    }
   }
 
   const setLocale = (locale2) => {
     locale.value = locale2
     localStorage.setItem("i18nextLng", locale.value);
   };
+
+  const notification = (message, color) => {
+    console.log('a');
+    $q.notify({
+      progress: true,
+      message: message,
+      color: color,
+      actions: [
+            { icon: 'close', color: 'white', round: true, handler: () => { /* ... */ } }
+          ]
+    })
+  }
 </script>

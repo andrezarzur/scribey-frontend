@@ -60,3 +60,7 @@ body {
     }
 
   }
+
+  :root {
+    --swiper-navigation-color: rgb(154, 155, 135);
+  }
